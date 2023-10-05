@@ -17,8 +17,7 @@ def registro(request):
             password = form.cleaned_data['password1']
             user = User.objects.create_user(username=username, password=password)
             user.save()
-            # Redirigir al usuario al inicio de sesión
-            return redirect('login')  # 'login' debe coincidir con el nombre de la URL en urls.py
+            return redirect('login') 
     else:
         form = UserCreationForm()
     
@@ -38,10 +37,8 @@ def iniciar_sesion(request):
                     request.session.set_expiry(0)
                 return redirect('home')
             else:
-                # Agrega un mensaje de error cuando la cuenta no existe
                 messages.error(request, 'Cuenta inexistente o contraseña incorrecta.')
         else:
-            # Si el formulario no es válido, también muestra un mensaje de error
             messages.error(request, 'Error en el formulario. Verifica tus credenciales.')
 
     else:
