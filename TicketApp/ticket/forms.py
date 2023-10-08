@@ -1,3 +1,4 @@
+from datetime import datetime
 from logging import PlaceHolder
 from django import forms
 from .models import Ticket
@@ -39,24 +40,20 @@ Eleccion_lugar = (
 )
 
 class TicketAddForm(forms.ModelForm):
+    destino = forms.ChoiceField(choices=Eleccion_lugar, label='Lugar de destino')
+    origen = forms.ChoiceField(choices=Eleccion_lugar, label='Lugar de origen')
+
     class Meta:
         model = Ticket
         fields = ['origen','destino','salida','bus','compannia',]
         
         labels = {
-            'origen': 'Lugar de origen',
-            'destino': 'Lugar de destino',
             'salida': "Horario de salida",
             'bus': "Nombre de la compañia",
             'compannia': 'Compañia del bus' 
         }
         widgets = {
-            'origen': forms.TextInput(attrs={'class': 'form-control'}),
-            'destino': forms.TextInput(attrs={'class': 'form-control'}),
-            'salida': forms.DateTimeInput(attrs={'class': 'form-control'}),
-            'bus': forms.TextInput(attrs={'class': 'form-control'}),
-            'compannia': forms.TextInput(attrs={'class': 'form-control'}),
-
+            'salida': forms.DateTimeInput(attrs={"type": "datetime-local", "min": datetime.now().strftime("%Y-%m-%dT%H:%M")})
         }
 
 class TicketSearchForm(forms.Form):
