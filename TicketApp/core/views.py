@@ -9,11 +9,9 @@ from django.contrib import messages
 def home(request):
     return render(request, "home.html", {})
 
-from .forms import CustomUserCreationForm  # Importa tu formulario personalizado
-
 def registro(request):
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)  # Usa tu formulario personalizado
+        form = UserCreationForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
@@ -21,7 +19,7 @@ def registro(request):
             user.save()
             return redirect('login') 
     else:
-        form = CustomUserCreationForm()  # Usa tu formulario personalizado
+        form = UserCreationForm()
     
     return render(request, 'registro.html', {'form': form})
 
