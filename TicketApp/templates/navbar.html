@@ -36,6 +36,14 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'cerrar_sesion' %}">Cerrar Sesión</a>
         </li>
+        {% if user.is_superuser %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'add_ticket' %}">Añadir tickets</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'list_ticket' %}">Listado de tickets</a>
+        </li>
+        {% endif %}
       </ul>
       {% else %}
       <ul class="navbar-nav">

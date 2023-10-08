@@ -1,0 +1,41 @@
+{% extends "index.html" %}
+
+{% block title %}Consulta Tickets{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <h1>Consulta Tickets</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_table }}
+        <button type="submit">Buscar</button>
+    </form>
+
+    {% if tickets %}
+    <h2>Resultados de la búsqueda:</h2>
+    <table class="table table-hover">
+        <!-- Table headers go here -->
+        <thead>
+            <tr>
+                <th>Origen</th>
+                <th>Destino</th>
+                <th>Salida</th>
+                <th>Bus</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ticket in tickets %}
+            <tr>
+                <td>{{ ticket.origen }}</td>
+                <td>{{ ticket.destino }}</td>
+                <td>{{ ticket.salida }}</td>
+                <td>{{ ticket.bus }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No se encontraron tickets que coincidan con los criterios de búsqueda.</p>
+    {% endif %}
+</div>
+{% endblock content %}
