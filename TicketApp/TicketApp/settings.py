@@ -38,9 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+<<<<<<< HEAD
     "crispy_forms",
     "crispy_bootstrap5",
     "core.apps.CoreConfig"
+=======
+    "core.apps.CoreConfig",
+    "ticket.apps.TicketConfig"
+>>>>>>> c4708d99007eea48bff156793d0c4a72eb25af4b
 ]
 
 MIDDLEWARE = [
@@ -129,4 +134,6 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

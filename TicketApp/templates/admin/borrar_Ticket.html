@@ -1,0 +1,16 @@
+
+{% extends "index.html" %}
+{% block content %}
+    <div class="text-center">
+    <form method="post">
+        {% csrf_token %}
+
+        <p class="delete-msg">
+        Estas seguro que quieres eliminar el ticket de ID: {{ object.id }}?
+        </p>
+
+        <a href="{% url 'list_ticket' %}" class="btn btn-secondary">NO</a>
+        <button class="btn btn-primary" type="submit">Si</button>
+    </form>
+    </div>
+{% endblock %}
