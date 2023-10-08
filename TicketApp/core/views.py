@@ -79,3 +79,8 @@ def cuenta(request):
     cards = Targetas.objects.all().filter(duenno = request.user.id)
 
     return render(request, "cuenta.html", {"form": form, "cards": cards})
+
+def deleteCard(request, id):
+    card = Targetas.objects.get(id = id)
+    card.delete()
+    return redirect("cuenta")

@@ -26,6 +26,7 @@
           <th scope="col">nombre de la targeta</th>
           <th scope="col">tipo de targeta</th>
           <th scope="col">banco</th>
+          <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
@@ -34,6 +35,9 @@
           <td scope="row">{{card.nombreTargeta}}</td>
           <td>{{card.tipoTargeta}}</td>
           <td>{{card.BancoTargeta}}</td>
+          <th scope="col">
+            <a class="btn btn-primary" href="{% url "deleteCard" card.id %}" role="button">Delete</a>
+          </th>
         </tr>
         {% endfor %}
       </tbody>
