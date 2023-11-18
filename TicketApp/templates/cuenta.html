@@ -1,0 +1,48 @@
+{% extends "index.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center g-2">
+  <div class="col-4"></div>
+  <div class="col-4">
+    <div class="card text-start">
+      <div class="card-body">
+        <h4 class="card-title">Registro de targeta Bancaria</h4>
+        <form action="" method="post">
+          {% csrf_token %}
+          <p class="card-text">{{form | crispy}}</p>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-4"></div>
+</div>
+<div class="row justify-content-center align-items-center g-2">
+  <div class="table-responsive">
+    <table class="table table-primary">
+      <thead>
+        <tr>
+          <th scope="col">nombre de la targeta</th>
+          <th scope="col">tipo de targeta</th>
+          <th scope="col">banco</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for card in cards %}
+        <tr class="">
+          <td scope="row">{{card.nombreTargeta}}</td>
+          <td>{{card.tipoTargeta}}</td>
+          <td>{{card.BancoTargeta}}</td>
+          <th scope="col">
+            <a class="btn btn-primary" href="{% url "deleteCard" card.id %}" role="button">Delete</a>
+          </th>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  
+</div>
+{% endblock content %}

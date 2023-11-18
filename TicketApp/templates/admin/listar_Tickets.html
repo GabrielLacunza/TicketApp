@@ -1,43 +1,43 @@
 {% extends "index.html" %} 
 
 {%block content%}
-{% if object_list %}
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th>Origen</th>
-      <th>Destino</th>
-      <th>Horario de salida</th>
-      <th>Bus</th>
-      <th>Compañia</th>
-	  <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for t in object_list %}
-    {% if user.is_authenticated %}
+  {% if object_list %}
+  <table class="table table-hover">
+
+    <thead>
+      <tr>
+        <th>Origen</th>
+        <th>Destino</th>
+        <th>Horario de salida</th>
+        <th>Bus</th>
+        <th>Compañia</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for t in object_list %}
+        {% if user.is_authenticated %}
+          <tr>
+            <td scope="row">{{ t.origen }}</td>
+            <td>{{ t.destino }}</td>
+            <td>{{ t.salida }}</td>
+            <td>{{ t.bus }}</td>
+            <td>{{ t.compannia }}</td>
+            {% if user.is_superuser%}
+              <td>
+                <a class="btn btn-primary" href="{% url 'edit_ticket' t.id %}">Editar</a>
+                <a class="btn btn-danger" href="{% url 'del_ticket' t.id %}">Borrar</a>
+              </td>
+            {% endif %}
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </tbody>
     
-    <tr>
-      <th scope="row">{{ t.origen }}</th>
-      <td>{{ t.destino }}</td>
-      <td>{{ t.salida }}</td>
-      <td>{{ t.bus }}</td>
-      <td>{{ t.compannia }}</td>
-    {% endif %}
-    {% if user.is_superuser%}
-      <td>
-        <a class="btn btn-primary" href="{% url 'edit_ticket' t.id %}">Editar</a>
-        <a class="btn btn-danger" href="{% url 'del_ticket' t.id %}">Borrar</a>
-      </td>
-    {% endif %}
+  </table>
 
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
-{% else %}
-<h1>No hay registros de carrera</h1>
-{% endif %} 
-
+  {% else %}
+    <h1>No existen registros de tickets ...</h1>
+  {% endif %} 
 {% endblock %}

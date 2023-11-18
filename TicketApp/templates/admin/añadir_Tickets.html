@@ -1,17 +1,18 @@
 {% extends 'index.html' %} 
+{% load crispy_forms_tags %}
  
 {% block extrastatic %} 
-<title>Nueva oferta</title> 
+<title>Nuevo ticket</title> 
 {% endblock %}
  
 {% block content %}
     <h1>Agregar Ticket</h1>
     
     <div class="content container">
-    <form method="POST">
-        {% csrf_token %} {{ form }}
-        <button type="submit">GRABAR</button>
-    </form>
+        <form method="POST">
+            {% csrf_token %} 
+            {{ form | crispy }}
+            <button type="submit" class="btn btn-primary">GRABAR</button>
+        </form>
     </div>
- 
 {% endblock %}

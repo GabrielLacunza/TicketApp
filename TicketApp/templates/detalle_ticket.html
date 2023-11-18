@@ -1,0 +1,31 @@
+{% extends "index.html" %}
+
+{% block title %}Detalles Ticket{% endblock title %}
+{% block content %}
+    <div class="container">
+        <h1>Detalles del Ticket</h1>
+
+        <table class="table table-hover">
+            <tr>
+                <th>Origen</th>
+                <td>{{ ticket.origen }}</td>
+            </tr>
+            <tr>
+                <th>Destino</th>
+                <td>{{ ticket.destino }}</td>
+            </tr>
+            <tr>
+                <th>Salida</th>
+                <td>{{ ticket.salida }}</td>
+            </tr>
+            <tr>
+                <th>Bus</th>
+                <td>{{ ticket.bus }}</td>
+            </tr>
+            <!-- Add other ticket details as needed -->
+
+        </table>
+
+        <a href="{% url 'reserva_ticket' ticket.numero_ticket %}">Volver a la búsqueda</a>
+    </div>
+{% endblock content %}
