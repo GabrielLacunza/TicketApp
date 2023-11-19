@@ -9,7 +9,11 @@ from .form import RegisterCard
 from .models import Targetas
 
 def home(request):
-    return render(request, "home.html", {})
+    if request.user.is_authenticated:
+        return redirect('consulta_ticket')
+    else:
+        return render(request, "home.html", {})
+
 
 def registro(request):
     if request.method == 'POST':

@@ -13,16 +13,22 @@
           <p class="nav-link">Bienvenido, {{ user.username }}</p>
         </li>
         {% if user.is_superuser %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'add_ticket' %}">Añadir tickets</a>
-          {% endif %}
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'list_ticket' %}">Listado de tickets</a>
-        </li>
-        <li class="nav-item">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'add_ticket' %}">Añadir tickets</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'list_ticket' %}">Listado tickets</a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'list_ticket' %}">Mis tickets</a>
+          </li>
+        {% endif %}
+        <!--
+          <li class="nav-item">
           <a class="nav-link" href="{% url 'cuenta' %}">Administrar targetas</a>
         </li>
+      -->
         <li class="nav-item">
           <a class="nav-link" href="{% url 'cerrar_sesion' %}">Cerrar Sesión</a>
         </li>

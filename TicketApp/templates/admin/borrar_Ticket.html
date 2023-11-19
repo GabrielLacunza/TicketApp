@@ -6,7 +6,7 @@
         {% csrf_token %}
 
         <p class="delete-msg">
-        Estas seguro que quieres eliminar el ticket de ID: {{ object.id }}?
+        Estas seguro que quieres eliminar el ticket de ID: {{ object.numero_ticket }}?
         </p>
 
         <a href="{% url 'list_ticket' %}" class="btn btn-secondary">NO</a>

@@ -1,4 +1,7 @@
 {% extends "index.html" %}
 
-{% block content %} 
+{% block content %}
+    {% if user.is_authenticated %}
+        {% include "buscatickets.html" %}
+    {% endif %}
 {% endblock content %}
