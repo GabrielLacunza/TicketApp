@@ -1,43 +1,61 @@
 {% extends "index.html" %} 
 
-{%block content%}
-  {% if object_list %}
-  <table class="table table-hover">
+{% block title %} Mis tickets {% endblock title %}
 
-    <thead>
-      <tr>
-        <th>Origen</th>
-        <th>Destino</th>
-        <th>Horario de salida</th>
-        <th>Bus</th>
-        <th>Compañia</th>
-        <th></th>
-      </tr>
-    </thead>
 
-    <tbody>
-      {% for t in object_list %}
+{% block content %}
+<br>
+  {% if tickets %}
+  <h1>Mis tickets</h1>
+    <table class="table table-hover">
+      <thead>
         {% if user.is_authenticated %}
           <tr>
-            <td scope="row">{{ t.origen }}</td>
-            <td>{{ t.destino }}</td>
-            <td>{{ t.salida }}</td>
-            <td>{{ t.bus }}</td>
-            <td>{{ t.compannia }}</td>
-            {% if user.is_superuser%}
-              <td>
-                <a class="btn btn-primary" href="{% url 'edit_ticket' t.id %}">Editar</a>
-                <a class="btn btn-danger" href="{% url 'del_ticket' t.id %}">Borrar</a>
-              </td>
+            <th>Origen</th>
+            <th>Destino</th>
+            <th>Horario de salida</th>
+            <th>Bus</th>
+            <th>Compañia</th>
+            <th>Estado</th>
+            {% if user.is_superuser %}
+              <th>Acciones</th>
+              <th>Reservado por</th>
             {% endif %}
           </tr>
         {% endif %}
-      {% endfor %}
-    </tbody>
-    
-  </table>
+      </thead>
 
+      <tbody>
+        {% for t in tickets %}
+          {% if not user.is_superuser %}
+            <tr>
+              <td scope="row">{{ t.origen }}</td>
+              <td>{{ t.destino }}</td>
+              <td>{{ t.salida }}</td>
+              <td>{{ t.bus }}</td>
+              <td>{{ t.compannia }}</td>
+              <td>{{ t.ticket_status }}</td>
+            </tr>
+          {% endif %}
+          {% if user.is_superuser %}
+            <tr>
+              <td scope="row">{{ t.origen }}</td>
+              <td>{{ t.destino }}</td>
+              <td>{{ t.salida }}</td>
+              <td>{{ t.bus }}</td>
+              <td>{{ t.compannia }}</td>
+              <td>{{ t.ticket_status }}</td>
+              <td>
+                <a class="btn btn-primary" href="{% url 'edit_ticket' t.numero_ticket %}">Editar</a>
+                <a class="btn btn-danger" href="{% url 'del_ticket' t.numero_ticket %}">Borrar</a>
+              </td>
+              <td>{{ t.reservado_por.username }}</td> 
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
   {% else %}
-    <h1>No existen registros de tickets ...</h1>
+    <h1>No existen registros de tickets...</h1>
   {% endif %} 
 {% endblock %}

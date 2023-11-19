@@ -22,10 +22,15 @@
                 <th>Bus</th>
                 <td>{{ ticket.bus }}</td>
             </tr>
+            <tr>
+                <th>Precio</th>
+                <td>---</td>
+            </tr>
             <!-- Add other ticket details as needed -->
 
         </table>
-
-        <a href="{% url 'reserva_ticket' ticket.numero_ticket %}">Volver a la búsqueda</a>
+        <a href="{% url 'reserva_ticket' ticket.numero_ticket %}">Reservar</a>
+        <br>
+        <a href="{% url 'home' %}">Volver a la busqueda</a>
     </div>
 {% endblock content %}
