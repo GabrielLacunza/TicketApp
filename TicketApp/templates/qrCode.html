@@ -1,0 +1,12 @@
+{% extends "index.html" %}
+
+{% block content %}
+  <div class="col d-flex justify-content-center">
+    {% if img_name %}
+      <h1>Ticket Deseado</h1>
+      <img src="../media/{{img_name}}" class="img-fluid rounded-top" alt="qr code">
+    {% else %}
+      <h1>Ticket no encontrado</h1>
+    {% endif %}
+  </div>
+{% endblock content %}

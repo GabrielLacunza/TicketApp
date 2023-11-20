@@ -35,6 +35,7 @@
               <td>{{ t.bus }}</td>
               <td>{{ t.compannia }}</td>
               <td>{{ t.ticket_status }}</td>
+              <td><a href="{% url "qrCode" t.numero_ticket %}">Codigo QR</a></td>
             </tr>
           {% endif %}
           {% if user.is_superuser %}

@@ -4,6 +4,10 @@ from .models import Ticket
 from .forms import  TicketSearchForm, TicketAddForm
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from qrcode import *
+from django.conf import settings
+import json
+import time
 # Create your views here.
 
 class TicketCreate(CreateView):
@@ -107,3 +111,18 @@ def reserva_ticket(request, numero_ticket):
     else:
         messages.error(request, 'Error, ticket no disponible')
         return redirect('ticket_not_available', ticket_id=ticket.id)
+
+def qrCode(request, numero_ticket):
+    ticket = Ticket.objects.get(numero_ticket=numero_ticket)
+    data = {
+        "numero_ticket": numero_ticket,
+        "origen": ticket.origen,
+        "destino": ticket.destino,
+        "salida": str(ticket.salida),
+        "bus": ticket.bus
+    }
+    img = make(json.dumps(data))
+    img_name = 'qr' + numero_ticket + '.png'
+    img.save(f"{settings.MEDIA_ROOT}/{img_name}")
+
+    return render(request, "qrCode.html", {"img_name": img_name})
