@@ -6,8 +6,8 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from qrcode import *
 from django.conf import settings
+from core.models import Targetas
 import json
-import time
 # Create your views here.
 
 class TicketCreate(CreateView):
@@ -93,7 +93,14 @@ def formulariotickets(request):
 # Funcion para visualizar con detalle el ticket antes de reservarlo
 def ticket_detalle(request, numero_ticket):  
     ticket = get_object_or_404(Ticket, numero_ticket=numero_ticket)
-    return render(request, 'detalle_ticket.html', {'ticket': ticket})
+    targetas = Targetas.objects.filter(duenno=request.user)
+
+    if request.method == "POST":
+        data = request.POST
+        if Targetas.objects.get(nombreTargeta=data["Targetas"]):
+            return redirect("reserva_ticket", numero_ticket=numero_ticket)
+
+    return render(request, 'detalle_ticket.html', {'ticket': ticket, "targetas": targetas})
 
 # Funcion para asignar el ticket al usuario y el status de dicho ticket a 'Reservado'
 def reserva_ticket(request, numero_ticket):

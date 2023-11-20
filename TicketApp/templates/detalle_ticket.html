@@ -29,7 +29,34 @@
             <!-- Add other ticket details as needed -->
 
         </table>
-        <a href="{% url 'reserva_ticket' ticket.numero_ticket %}">Reservar</a>
+        <div class="container">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3 row">
+                </div>
+                <div class="mb-3">
+                    <label for="Targetas" class="form-label">Targetas</label>
+                    <select class="form-select form-select-sm" name="Targetas" id="Targetas" required>
+                        <option value="">Seleccione una</option>
+                        {% if targetas %}
+                            {% for targeta in targetas %}
+                                <option value="{{targeta.nombreTargeta}}">{{targeta.nombreTargeta}} - {{targeta.tipoTargeta}}</option>
+                            {% endfor %}
+                        {% else %}
+                            <option value="">No hay targetas, por favor cree alguna targeta</option>
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="mb-3 row">
+                    <div class="d-grid gap-2">
+                      <button type="submit" name="Reservar" id="Reservar" class="btn btn-primary">
+                        Reservar
+                      </button>
+                    </div>
+                    
+                </div>
+            </form>
+        </div>
         <br>
         <a href="{% url 'home' %}">Volver a la busqueda</a>
     </div>
