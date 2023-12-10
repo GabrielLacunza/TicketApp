@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from . import views
-from .views import ticket_detalle, reserva_ticket, ticket_list
+from .views import ticket_detalle, reserva_ticket, ticket_list, generate_report, generate_report_pdf, download_report
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -26,6 +26,11 @@ urlpatterns = [
 
     path('ticket/<uuid:numero_ticket>/', ticket_detalle, name='ticket_detalle'),
     path('reserva/<uuid:numero_ticket>/', reserva_ticket, name='reserva_ticket'),
+
+    # ==== Funciones para la reporteria de tickets
+
+    path('generate/', generate_report, name='generate_report'),
+    path('generate/download/<str:pdf_path>/', download_report, name='download_report'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

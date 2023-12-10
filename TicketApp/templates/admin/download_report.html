@@ -1,0 +1,11 @@
+{% extends "index.html" %}
+
+
+{% block content %}
+    <body>
+        <h2>Download Report</h2>
+        <p>Your report has been generated. Click the link below to download:</p>
+        <a href="{% url 'download_report' pdf_path=pdf_path %}" download>Download Report</a>
+    </body>
+    </html>
+{% endblock %}

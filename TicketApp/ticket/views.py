@@ -1,13 +1,19 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from .models import Ticket
-from .forms import  TicketSearchForm, TicketAddForm
+from .forms import  TicketSearchForm, TicketAddForm, ReportForm
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from qrcode import *
 from django.conf import settings
 from core.models import Targetas
 import json
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
+from fpdf import FPDF
+from django.http import HttpResponse
 # Create your views here.
 
 class TicketCreate(CreateView):
@@ -133,3 +139,77 @@ def qrCode(request, numero_ticket):
     img.save(f"{settings.MEDIA_ROOT}/{img_name}")
 
     return render(request, "qrCode.html", {"img_name": img_name})
+
+# ================================= GENERACION DE REPORTES
+
+def generate_report_pdf(title, start_time, end_time):
+    # Fetch data from the "Ticket" model based on the time range
+    tickets = Ticket.objects.filter(fecha_creacion__range=[start_time, end_time])
+
+    # Convert queryset to DataFrame
+    df = pd.DataFrame.from_records(tickets.values())
+
+    # Check if 'ticket_status' column exists in the DataFrame
+    if 'ticket_status' in df.columns:
+        # Compute total ticket count
+        total_tickets = len(df)
+
+        # Compute ticket status distribution
+        ticket_status_counts = df['ticket_status'].value_counts()
+
+        # Plot the ticket status distribution
+        plt.bar(ticket_status_counts.index, ticket_status_counts.values)
+        plt.title('Distribucion de ticket segun estado')
+        plt.xlabel('Estado ticket')
+        plt.ylabel('Conteo')
+
+        # Save the plot as an image
+        image_path = 'report_plot.png'
+        plt.savefig(image_path)
+        plt.close()
+
+        # Create PDF and add the plot image
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("Arial", size=12)
+        pdf.cell(200, 10, txt=f"Title: {title}", ln=True, align='L')
+        pdf.ln(10)
+        pdf.cell(200, 10, txt=f"Total Tickets: {total_tickets}", ln=True, align='L')
+        pdf.ln(10)
+        pdf.image(image_path, x=10, y=pdf.get_y(), w=190)
+
+        # Save the PDF with the provided title
+        pdf_filename = f"{title}_report.pdf"
+        pdf.output(pdf_filename)
+
+        return pdf_filename
+    else:
+        # Handle the case where 'ticket_status' column is not found in DataFrame
+        return f"Error: 'ticket_status' column not found in DataFrame for title: {title}"
+
+def generate_report(request):
+    if request.method == 'POST':
+        form = ReportForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            start_time = form.cleaned_data['start_time']
+            end_time = form.cleaned_data['end_time']
+
+            # Save the report to the database
+            #report = Report(title=title, data="")
+            #report.save()
+
+            # Generate PDF and return the download link
+            pdf_path = generate_report_pdf(title,start_time, end_time)
+            return redirect('download_report', pdf_path=pdf_path)
+    else:
+        form = ReportForm()
+
+    return render(request, 'admin/generate_report.html', {'form': form})
+
+def download_report(request, pdf_path):
+    with open(pdf_path, 'rb') as pdf_file:
+        response = HttpResponse(pdf_file.read(), content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="{pdf_path}"'
+        return response
+    
