@@ -1,0 +1,56 @@
+{% extends 'index.html' %} 
+
+{% block content %}
+
+<form method="post" action="{% url 'generate_report' %}">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="id_title" class="form-label">Title:</label>
+        <input
+            type="text"
+            class="form-control"
+            name="id_title"
+            id="id_title"
+            placeholder="Repord's title"
+            required
+        />
+    </div>
+    
+    <br>
+    <div class="mb-3">
+        <label for="id_start_time" class="form-label">Start Time:</label>
+        <input
+            type="datetime-local"
+            class="form-control"
+            name="start_time"
+            id="id_start_time"
+            placeholder="start time"
+            required
+        />
+    </div>
+    <br>
+    <div class="mb-3">
+        <label for="id_end_time" class="form-label">End Time:</label>
+        <input
+            type="datetime-local"
+            class="form-control"
+            name="id_end_time"
+            id="id_end_time"
+            placeholder="end time"
+            required
+        />
+    </div>
+    <br>
+    <div class="d-grid gap-2">
+        <button
+            type="submit"
+            name="generateButton"
+            id="generateButton"
+            class="btn btn-primary"
+        >
+            Generate Report
+        </button>
+    </div>
+</form>
+
+{% endblock %}

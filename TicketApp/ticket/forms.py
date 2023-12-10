@@ -60,3 +60,7 @@ class TicketSearchForm(forms.Form):
     origen = forms.ChoiceField(choices=Eleccion_lugar, required=False)
     destino = forms.ChoiceField(choices=Eleccion_lugar, required=False)
 
+class ReportForm(forms.Form):
+    title = forms.CharField(max_length=255)
+    start_time = forms.DateTimeField(label='Start Time')
+    end_time = forms.DateTimeField(label='End Time')
