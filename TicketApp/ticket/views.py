@@ -142,33 +142,39 @@ def qrCode(request, numero_ticket):
 
 # ================================= GENERACION DE REPORTES
 
+
+# Esta funcion se encargara de;
+# - Consultar todos los tickets que esten creados en un rango de fechas (el rango son 2 parametros)
+# - Genera un grafico con la distribucion de status de los tickets
+# - Inserta este grafico en un PDF y lo envia como retorno
 def generate_report_pdf(title, start_time, end_time):
-    # Fetch data from the "Ticket" model based on the time range
+    # Consulta de tickets segun el rango entregado
     tickets = Ticket.objects.filter(fecha_creacion__range=[start_time, end_time])
 
-    # Convert queryset to DataFrame
+        
+    # Conversion de la queryset en un dataframe de Pandas
     df = pd.DataFrame.from_records(tickets.values())
 
-    # Check if 'ticket_status' column exists in the DataFrame
     if 'ticket_status' in df.columns:
-        # Compute total ticket count
+        # Conteo total de tickets
         total_tickets = len(df)
 
-        # Compute ticket status distribution
+        # Conteo de cantidad de status de tickets (Reservado, activo, cerrado) 
+        # Se establece esto porque la consulta puede agarrar tickets con un solo o mas status en comun
         ticket_status_counts = df['ticket_status'].value_counts()
 
-        # Plot the ticket status distribution
+        # Generacion del grafico
         plt.bar(ticket_status_counts.index, ticket_status_counts.values)
         plt.title('Distribucion de ticket segun estado')
         plt.xlabel('Estado ticket')
         plt.ylabel('Conteo')
 
-        # Save the plot as an image
+        # Guardado del grafico en un png.
         image_path = 'report_plot.png'
         plt.savefig(image_path)
         plt.close()
 
-        # Create PDF and add the plot image
+        # Creado de pdf e insercion del grafico en el
         pdf = FPDF()
         pdf.add_page()
         pdf.set_font("Arial", size=12)
@@ -184,9 +190,12 @@ def generate_report_pdf(title, start_time, end_time):
 
         return pdf_filename
     else:
-        # Handle the case where 'ticket_status' column is not found in DataFrame
+        # Error si es que la columna 'ticket_status' no se encuentra en el dataframe
+        # Este error suele ocurrir cuando la consulta no agarra ningun ticket
         return f"Error: 'ticket_status' column not found in DataFrame for title: {title}"
 
+
+# Metodo para generar el formulario para la generacion del reporte
 def generate_report(request):
     if request.method == 'POST':
         form = ReportForm(request.POST)
@@ -195,11 +204,11 @@ def generate_report(request):
             start_time = form.cleaned_data['start_time']
             end_time = form.cleaned_data['end_time']
 
-            # Save the report to the database
+            # Metodo para guardar el reporte en la base de datos (NO UTILIZAR)
             #report = Report(title=title, data="")
             #report.save()
 
-            # Generate PDF and return the download link
+            # Genera el pdf y retorna el link para su descarga
             pdf_path = generate_report_pdf(title,start_time, end_time)
             return redirect('download_report', pdf_path=pdf_path)
     else:
@@ -207,6 +216,7 @@ def generate_report(request):
 
     return render(request, 'admin/generate_report.html', {'form': form})
 
+# Metodo que recive un archivo PDF para descargarlo automaticamente
 def download_report(request, pdf_path):
     with open(pdf_path, 'rb') as pdf_file:
         response = HttpResponse(pdf_file.read(), content_type='application/pdf')
